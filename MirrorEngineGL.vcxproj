@@ -162,6 +162,10 @@
     <ClInclude Include="Src\Render\opengl_utils.h" />
     <ClInclude Include="Src\Render\shader.h" />
     <ClInclude Include="Src\Render\vertex_buffer.h" />
+    <ClInclude Include="Src\Common.h" />
+    <ClInclude Include="Src\Utils\cube.h" />
+    <ClInclude Include="Src\Utils\MatrixManager.h" />
+    <ClInclude Include="Src\Utils\matrix_utils.h" />
     <ClInclude Include="Src\Utils\stb_image.h" />
     <ClInclude Include="Src\Utils\textureLoader.h" />
   </ItemGroup>

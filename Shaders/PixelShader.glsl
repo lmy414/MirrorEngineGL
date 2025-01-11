@@ -1,16 +1,26 @@
 #version 330 core
-out vec4 FragColor;
 
-in vec3 ourColor;
-in vec2 TexCoord;
+out vec4 FragColor;  // 输出颜色
 
-uniform sampler2D texture1;
-uniform sampler2D texture2;
-uniform vec3 triangleColor;
+in vec3 ourColor;  // 输入的颜色
+in vec2 TexCoord;  // 输入的纹理坐标
+
+uniform sampler2D texture1;  // 第一个纹理
+uniform sampler2D texture2;  // 第二个纹理
+uniform vec3 triangleColor;  // 用于调节颜色的 uniform 变量
 
 void main()
 {
-    FragColor = mix(texture(texture1, TexCoord), texture(texture2, TexCoord), 0.2f);
-    // 使用混合模式将两个纹理的颜色叠加
-    FragColor.rgb *= triangleColor;  // 根据颜色调节三角形的颜色
+    // 获取两个纹理的颜色值
+    vec4 tex1Color = texture(texture1, TexCoord);
+    vec4 tex2Color = texture(texture2, TexCoord);
+
+    // 混合两个纹理的颜色
+    vec4 mixedColor = mix(tex1Color, tex2Color, 0.5f);  // 0.5f 为混合比例
+
+    // 根据 triangleColor 来调整最终的颜色
+    mixedColor.rgb *= triangleColor;
+
+    // 将最终的混合颜色输出
+    FragColor = mixedColor;
 }
