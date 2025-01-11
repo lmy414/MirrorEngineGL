@@ -12,6 +12,9 @@
 #include "../Src/Render/shader.h"
 // 封装顶点缓冲区类，管理顶点数据
 #include "../Src/Render/vertex_buffer.h"
+//封装摄像机，管理相机位置，方向，视角等
+#include"../Src/Render/Camera.h"
+
 
 // 工具模块
 // 封装了MVP矩阵
@@ -20,6 +23,7 @@
 #include "../Src/Utils/textureLoader.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
 #include "../Src/Utils/Cube.h"
+
 
 // GLM 数学库
 // 用于矢量、矩阵运算以及变换计算
