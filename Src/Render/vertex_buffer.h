@@ -1,13 +1,12 @@
 #ifndef VERTEX_BUFFER_H
 #define VERTEX_BUFFER_H
 
-#define GLFW_INCLUDE_NONE // 避免 GLFW 自动包含 OpenGL 的头文件
-
 #include <glad/glad.h>
 
-extern float vertices[9];  // 3 * 3 的三角形顶点数据
+// 顶点和索引数据
+extern float vertices[];
+extern unsigned int indices[];
 
-void SetupVertexBuffers(unsigned int& VBO, unsigned int& VAO);
+void SetupVertexBuffers(unsigned int& VBO, unsigned int& VAO, unsigned int& EBO);
 
-#endif // VERTEX_BUFFER_H
-#pragma once
+#endif

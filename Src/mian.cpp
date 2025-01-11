@@ -2,6 +2,7 @@
 #include "../Src/Render/opengl_utils.h"
 #include "../Src/Render/shader.h"
 #include"../Src/Render/vertex_buffer.h"
+#include "../Src/Utils/textureLoader.h"  // 引入纹理加载器
 #include <iostream>
 
 int main() {
@@ -14,8 +15,11 @@ int main() {
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
 
     // 设置顶点数据和缓冲
-    unsigned int VBO, VAO;
-    SetupVertexBuffers(VBO, VAO);  // 使用新函数设置顶点缓冲
+    unsigned int VBO, VAO, EBO;
+    SetupVertexBuffers(VBO, VAO,EBO);  // 使用新函数设置顶点缓冲
+    unsigned int texture1 = TextureLoader::LoadTexture("./Assets/tex/6-1948-生气2.png");
+   
+
     
     // 初始化 ImGui
     ImGuiManager imguiManager;
@@ -35,7 +39,7 @@ int main() {
         // 传递颜色值到着色器
         int colorLocation = glGetUniformLocation(shader.ID, "triangleColor");
         if (colorLocation == -1) {
-            //std::cerr << "ERROR::SHADER::UNIFORM::triangleColor not found" << std::endl;
+            std::cerr << "ERROR::SHADER::UNIFORM::triangleColor not found" << std::endl;
         }
         shader.setVec3("triangleColor", triangleColor[0], triangleColor[1], triangleColor[2]);
         
@@ -46,7 +50,8 @@ int main() {
 
         // 绘制三角形
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glBindVertexArray(0);
 
         // 启动 ImGui 界面
         imguiManager.BeginFrame();
