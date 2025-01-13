@@ -139,6 +139,7 @@
     <ClCompile Include="imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="imgui\imgui_tables.cpp" />
     <ClCompile Include="imgui\imgui_widgets.cpp" />
+    <ClCompile Include="Src\Core\InputManager.cpp" />
     <ClCompile Include="Src\glad.c" />
     <ClCompile Include="Src\Gui\gui.cpp" />
     <ClCompile Include="Src\mian.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="imgui\imstb_rectpack.h" />
     <ClInclude Include="imgui\imstb_textedit.h" />
     <ClInclude Include="imgui\imstb_truetype.h" />
+    <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Gui\gui.h" />
     <ClInclude Include="Src\Render\camera.h" />
     <ClInclude Include="Src\Render\opengl_utils.h" />

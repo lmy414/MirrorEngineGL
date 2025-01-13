@@ -2,30 +2,27 @@
 
 // 全局相机对象
 Core::Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));  // 初始化相机位置
-glm::vec3 initialPosition(0.0f, 0.0f, 3.0f);         // 初始相机位置
-glm::vec3 initialFront(0.0f, 0.0f, -1.0f);  // 初始相机前向
 
-bool isRightMousePressed = false;
-float lastX = 400.0f, lastY = 300.0f; // 初始鼠标位置
-bool firstMouse = true; // 检测是否为首次进入鼠标回调
+float mouseSpeed = 0.1f; // 鼠标灵敏度
+float moveSpeed = 0.1f;  // 键盘移动速度
 
-float mouseSpeed = 0.5f; // 初始鼠标速度（灵敏度）
-float moveSpeed = 2.5f; // 初始键盘移动速度
-
-void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
-void mouseCallback(GLFWwindow* window, double xpos, double ypos);
+InputManager* inputManager = nullptr;  // 输入管理器
 
 int main() {
     // 初始化 OpenGL 和窗口
     GLFWwindow* window = InitializeOpenGL(800, 600, "MirrorEngine");
     if (!window) return -1;
 
-    // 设置光标为默认显示模式
-    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+    // 创建输入管理器实例
+    inputManager = new InputManager(camera, moveSpeed, mouseSpeed);
 
-    // 注册鼠标回调函数
-    glfwSetCursorPosCallback(window, mouseCallback);
-    glfwSetMouseButtonCallback(window, mouseButtonCallback);
+    // 注册输入回调函数
+    glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
+        inputManager->MouseCallback(window, xpos, ypos);
+        });
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
+        inputManager->MouseButtonCallback(window, button, action, mods);
+        });
 
     // 启用深度测试
     glEnable(GL_DEPTH_TEST);
@@ -64,8 +61,11 @@ int main() {
 
     // 主渲染循环
     while (!glfwWindowShouldClose(window)) {
-        // 输入处理
-        processInput(window);
+        // 获取帧时间
+        float deltaTime = 0.016f;  // 假设固定帧时间（可以替换为实际的 deltaTime）
+
+        // 处理输入
+        inputManager->ProcessInput(window, deltaTime);
 
         // 获取矩阵
         glm::mat4 view = camera.GetViewMatrix();
@@ -139,68 +139,6 @@ int main() {
 
     imguiManager.Shutdown();
     glfwTerminate();
+    delete inputManager;
     return 0;
-}
-
-// processInput 函数
-void processInput(GLFWwindow* window) {
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
-        glfwSetWindowShouldClose(window, true);
-
-    float deltaTime = 0.016f; // 示例固定帧时间（可以替换为实际 deltaTime）
-
-    // 使用 moveSpeed 变量控制移动速度
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::FORWARD, moveSpeed * deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::BACKWARD, moveSpeed * deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::LEFT, moveSpeed * deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::RIGHT, moveSpeed * deltaTime);
-    // Q 和 E 键控制上下移动
-    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::DOWN, moveSpeed * deltaTime); // 向下
-    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
-        camera.ProcessKeyboard(Core::CameraMovement::UP, moveSpeed * deltaTime); // 向上
-}
-
-
-// 鼠标按键回调函数
-void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods) {
-    if (button == GLFW_MOUSE_BUTTON_RIGHT) {
-        if (action == GLFW_PRESS) {
-            isRightMousePressed = true;
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED); // 隐藏并锁定光标
-        }
-        else if (action == GLFW_RELEASE) {
-            isRightMousePressed = false;
-            glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);  // 显示光标
-        }
-    }
-}
-
-// 鼠标移动回调函数
-void mouseCallback(GLFWwindow* window, double xpos, double ypos) {
-    if (!isRightMousePressed) {
-        firstMouse = true; // 如果未按住右键，重置首次检测
-        return;
-    }
-
-    if (firstMouse) {
-        lastX = xpos;
-        lastY = ypos;
-        firstMouse = false;
-    }
-
-    float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos; // 注意 Y 方向是反的
-    lastX = xpos;
-    lastY = ypos;
-
-    // 根据鼠标速度调整相机旋转速度
-    xoffset *= mouseSpeed;
-    yoffset *= mouseSpeed;
-
-    camera.ProcessMouseMovement(xoffset, yoffset);
 }

@@ -38,6 +38,10 @@ namespace Core {
         // 矩阵管理器
         MatrixManager matrixManager;
 
+    private:
+        bool viewMatrixDirty = true;  // 用于标记视图矩阵是否需要更新
+
+    public:
         // 构造函数：用向量初始化
         Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 3.0f),
             glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f),
@@ -52,25 +56,25 @@ namespace Core {
             Yaw = yaw;
             Pitch = pitch;
             updateCameraVectors();
-            updateViewMatrix(); // 初始化视图矩阵
         }
 
         // 设置相机位置
         void SetPosition(const glm::vec3& position) {
             Position = position;
             updateCameraVectors();
-            updateViewMatrix();  // 设置后立即更新视图矩阵
+            viewMatrixDirty = true;  // 标记视图矩阵需要更新
         }
 
         // 设置相机的前向向量
         void SetFront(const glm::vec3& front) {
             Front = front;
             updateCameraVectors();
-            updateViewMatrix();  // 设置后立即更新视图矩阵
+            viewMatrixDirty = true;  // 标记视图矩阵需要更新
         }
 
-        // 返回视图矩阵
-        glm::mat4 GetViewMatrix() const {
+        // 获取视图矩阵（只有在需要时才更新）
+        glm::mat4 GetViewMatrix() {
+            updateViewMatrixIfNeeded(); // 只有在需要时才更新
             return matrixManager.GetViewMatrix();
         }
 
@@ -97,7 +101,7 @@ namespace Core {
                 Position -= Up * velocity;   // 向下移动
                 break;
             }
-            updateViewMatrix(); // 键盘输入后更新视图矩阵
+            viewMatrixDirty = true;  // 标记视图矩阵需要更新
         }
 
         // 鼠标输入处理
@@ -113,7 +117,7 @@ namespace Core {
             }
 
             updateCameraVectors();
-            updateViewMatrix(); // 更新视图矩阵
+            viewMatrixDirty = true;  // 标记视图矩阵需要更新
         }
 
         // 鼠标滚轮缩放
@@ -129,7 +133,7 @@ namespace Core {
             Yaw = -90.0f;                            // 初始偏航角
             Pitch = 0.0f;                            // 初始俯仰角
             updateCameraVectors();
-            updateViewMatrix(); // 重置后更新视图矩阵
+            viewMatrixDirty = true;  // 标记视图矩阵需要更新
         }
 
     private:
@@ -145,9 +149,12 @@ namespace Core {
             Up = glm::normalize(glm::cross(Right, Front));
         }
 
-        // 更新视图矩阵
-        void updateViewMatrix() {
-            matrixManager.SetViewMatrix(Position, Position + Front, Up);
+        // 更新视图矩阵时检查是否有变化
+        void updateViewMatrixIfNeeded() {
+            if (viewMatrixDirty) {
+                matrixManager.SetViewMatrix(Position, Position + Front, Up);
+                viewMatrixDirty = false;
+            }
         }
     };
 

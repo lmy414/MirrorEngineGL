@@ -24,6 +24,9 @@
 //立方体类，定义了一个立方体的顶点数据和索引数据
 #include "../Src/Utils/Cube.h"
 
+//核心模块
+//输入管理器，处理键盘和鼠标输入
+#include"../Src/Core/InputManager.h"
 
 // GLM 数学库
 // 用于矢量、矩阵运算以及变换计算
