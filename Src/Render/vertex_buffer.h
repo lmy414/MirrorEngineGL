@@ -3,15 +3,13 @@
 
 #include <glad/glad.h>
 #include <vector>
+#include "../Utils/mesh.h"
 
-// 顶点和索引数据
-
-
+// 使用 Mesh 类创建顶点和索引缓冲区
 void SetupVertexBuffers(
     unsigned int& VBO,
     unsigned int& VAO,
     unsigned int& EBO,
-    const std::vector<float>& vertices,
-    const std::vector<unsigned int>& indices);
+    const Mesh& mesh);  // 传入 Mesh 类的实例
 
 #endif

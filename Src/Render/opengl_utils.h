@@ -14,7 +14,6 @@ GLFWwindow* InitializeOpenGL(int width, int height, const char* title);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 // 输入处理函数
-void processInput(GLFWwindow* window);
 
 #endif // OPENGL_UTILS_H
 #pragma once

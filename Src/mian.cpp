@@ -8,6 +8,9 @@ float moveSpeed = 0.1f;  // 键盘移动速度
 
 InputManager* inputManager = nullptr;  // 输入管理器
 
+// 全局缓冲对象变量
+unsigned int VBO, VAO, EBO;
+
 int main() {
     // 初始化 OpenGL 和窗口
     GLFWwindow* window = InitializeOpenGL(800, 600, "MirrorEngine");
@@ -36,18 +39,10 @@ int main() {
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
 
-    Cube cube; // 创建立方体对象
-    const auto& cubeVertices = cube.GetVertices();
-    const auto& cubeIndices = cube.GetIndices();
-
-    // 设置顶点数据和缓冲
-    unsigned int cubeVBO, cubeVAO, cubeEBO;
-    SetupVertexBuffers(cubeVBO, cubeVAO, cubeEBO, cubeVertices, cubeIndices);
-
-    // 加载纹理
-    unsigned int texture1 = TextureLoader::LoadTexture("./Assets/tex/6-1948-生气2.png");
-    if (texture1 == 0) {
-        std::cerr << "Failed to load texture!" << std::endl;
+    // 加载模型
+    ModelLoader modelLoader;
+    if (!modelLoader.LoadModel("./Assets/obj/text.obj")) {
+        std::cerr << "Failed to load model!" << std::endl;
         return -1;
     }
 
@@ -83,27 +78,32 @@ int main() {
         // 使用着色器程序
         shader.use();
 
-        // 激活纹理单元 0
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, texture1);
-        glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0); // 将纹理传递给着色器
-
-        // 传递颜色值到着色器
-        shader.setVec3("triangleColor", triangleColor[0], triangleColor[1], triangleColor[2]);
-
-        // 传递矩阵到着色器
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
         // 清空屏幕
         glClearColor(0.2f, 0.0f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // 绘制立方体
-        glBindVertexArray(cubeVAO);
-        glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(cubeIndices.size()), GL_UNSIGNED_INT, 0);
-        glBindVertexArray(0);
+        // 渲染每个网格
+        for (const Mesh& mesh : modelLoader.meshes) {
+            SetupVertexBuffers(VBO, VAO, EBO, mesh); // 初始化 VBO, VAO, EBO
+
+            // 激活纹理单元
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, 0);  // 这里需要加载纹理，如果有的话
+            glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0);  // 传递纹理给着色器
+
+            // 传递颜色值到着色器
+            shader.setVec3("triangleColor", triangleColor[0], triangleColor[1], triangleColor[2]);
+
+            // 传递矩阵到着色器
+            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
+            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
+            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+            // 绘制网格
+            glBindVertexArray(VAO);
+            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
+            glBindVertexArray(0);
+        }
 
         // 启动 ImGui 界面
         imguiManager.BeginFrame();
@@ -134,8 +134,9 @@ int main() {
     }
 
     // 释放资源
-    glDeleteVertexArrays(1, &cubeVAO);
-    glDeleteBuffers(1, &cubeVBO);
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteBuffers(1, &EBO);  // 释放 EBO
 
     imguiManager.Shutdown();
     glfwTerminate();

@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;assimp-vc143-mtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -166,7 +166,8 @@
     <ClInclude Include="Src\Render\shader.h" />
     <ClInclude Include="Src\Render\vertex_buffer.h" />
     <ClInclude Include="Src\Common.h" />
-    <ClInclude Include="Src\Utils\cube.h" />
+    <ClInclude Include="Src\Utils\ModelLoader.h.h" />
+    <ClInclude Include="Src\Utils\mesh.h" />
     <ClInclude Include="Src\Utils\MatrixManager.h" />
     <ClInclude Include="Src\Utils\matrix_utils.h" />
     <ClInclude Include="Src\Utils\stb_image.h" />

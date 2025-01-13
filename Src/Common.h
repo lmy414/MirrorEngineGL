@@ -22,7 +22,7 @@
 // 纹理加载器，负责加载纹理数据并绑定到 OpenGL 的纹理对象
 #include "../Src/Utils/textureLoader.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
-#include "../Src/Utils/Cube.h"
+#include "../Src/Utils/ModelLoader.h.h"
 
 //核心模块
 //输入管理器，处理键盘和鼠标输入

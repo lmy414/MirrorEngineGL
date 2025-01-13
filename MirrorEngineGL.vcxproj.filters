@@ -110,9 +110,6 @@
     <ClInclude Include="Src\Common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\cube.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Utils\MatrixManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -126,6 +123,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\InputManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\ModelLoader.h.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Utils\mesh.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
