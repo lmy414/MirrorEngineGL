@@ -34,14 +34,14 @@ int main() {
     MatrixManager matrixManager;
     matrixManager.SetModelMatrix(glm::mat4(1.0f)); // 单位矩阵
     matrixManager.SetViewMatrix(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // 摄像机
-    matrixManager.SetPerspectiveProjection(45.0f, 800.0f / 600.0f, 0.1f, 100.0f); // 透视投影
+    matrixManager.SetFixedPerspectiveProjection(45.0f, 0.1f, 100.0f);
 
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
 
     // 加载模型
     ModelLoader modelLoader;
-    if (!modelLoader.LoadModel("./Assets/obj/text.obj")) {
+    if (!modelLoader.LoadModel("./Assets/obj/text2.fbx")) {
         std::cerr << "Failed to load model!" << std::endl;
         return -1;
     }
@@ -64,7 +64,7 @@ int main() {
 
         // 获取矩阵
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = matrixManager.GetProjectionMatrix();
+        glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
 
         // 创建模型矩阵，结合旋转角度
         glm::mat4 model = matrixManager.GetModelMatrix();
@@ -76,7 +76,19 @@ int main() {
         matrixManager.SetModelMatrix(model); // 更新模型矩阵
 
         // 使用着色器程序
+        int width, height;
+        glfwGetFramebufferSize(window, &width, &height);
+
+        // 更新窗口大小并调整投影矩阵
+        matrixManager.SetWindowSize(width, height);
+
+        // 获取当前投影矩阵
+        projection = matrixManager.GetProjectionMatrix();
+        GLuint projectionLocation = glGetUniformLocation(shader.ID, "projection");
+
+        // 在渲染过程中传递矩阵到着色器
         shader.use();
+        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
         // 清空屏幕
         glClearColor(0.2f, 0.0f, 0.3f, 1.0f);
