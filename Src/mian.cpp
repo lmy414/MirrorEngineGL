@@ -13,7 +13,7 @@ unsigned int VBO, VAO, EBO;
 
 int main() {
     // 初始化 OpenGL 和窗口
-    GLFWwindow* window = InitializeOpenGL(800, 600, "MirrorEngine");
+    GLFWwindow* window = InitializeOpenGL(1920, 1080, "MirrorEngine");
     if (!window) return -1;
 
     // 创建输入管理器实例
@@ -94,7 +94,7 @@ int main() {
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
         // 清空屏幕
-        glClearColor(0.2f, 0.0f, 0.3f, 1.0f);
+        glClearColor(triangleColor[0], triangleColor[1], triangleColor[2], 1.0f); // 使用动态颜色
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 渲染每个网格
@@ -121,6 +121,7 @@ int main() {
         ImGui::Text("Mouse Speed:");
         ImGui::SliderFloat("Mouse Sensitivity", &mouseSpeed, 0.01f, 1.0f); // 控制鼠标灵敏度
         ImGui::SliderFloat("Move Speed", &moveSpeed, 0.1f, 10.0f); // 设置范围从 0.1 到 10.0
+
         ImGui::End();
 
         imguiManager.EndFrame();

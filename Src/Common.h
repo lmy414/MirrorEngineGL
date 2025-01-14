@@ -11,18 +11,23 @@
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
 #include "../Src/Render/shader.h"
 // 封装顶点缓冲区类，管理顶点数据
-#include "../Src/Render/mesh.h"
+#include "../Src/Render/render_mesh.h"
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"
+//封装渲染管线类
+#include"../Src/Render/Render.h"
 
 
 // 工具模块
 // 封装了MVP矩阵
-#include"../Src/Utils/MatrixManager.h"
+#include"../Src/Tool/MatrixManager.h"
+
+
+//资源模块
 // 纹理加载器，负责加载纹理数据并绑定到 OpenGL 的纹理对象
-#include "../Src/Utils/textureLoader.h"
+#include "../Src/Resources/textureLoader.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
-#include "../Src/Utils/ModelLoader.h.h"
+#include "../Src/Resources/ModelLoader.h.h"
 
 //核心模块
 //输入管理器，处理键盘和鼠标输入
