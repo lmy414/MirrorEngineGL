@@ -46,6 +46,9 @@ int main() {
         return -1;
     }
 
+    // 获取模型中的所有网格
+    std::vector<Mesh> meshes = modelLoader.GetMeshes();
+
     // 初始化 ImGui
     ImGuiManager imguiManager;
     imguiManager.Initialize(window);
@@ -95,26 +98,8 @@ int main() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 渲染每个网格
-        for (const Mesh& mesh : modelLoader.meshes) {
-            SetupVertexBuffers(VBO, VAO, EBO, mesh); // 初始化 VBO, VAO, EBO
-
-            // 激活纹理单元
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, 0);  // 这里需要加载纹理，如果有的话
-            glUniform1i(glGetUniformLocation(shader.ID, "texture1"), 0);  // 传递纹理给着色器
-
-            // 传递颜色值到着色器
-            shader.setVec3("triangleColor", triangleColor[0], triangleColor[1], triangleColor[2]);
-
-            // 传递矩阵到着色器
-            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-            glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-            // 绘制网格
-            glBindVertexArray(VAO);
-            glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(mesh.indices.size()), GL_UNSIGNED_INT, 0);
-            glBindVertexArray(0);
+        for (Mesh& mesh : meshes) {
+            mesh.Render(shader, model, view, projection);  // 渲染每个网格
         }
 
         // 启动 ImGui 界面

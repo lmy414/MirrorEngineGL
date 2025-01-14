@@ -6,7 +6,6 @@
 #include <assimp/postprocess.h>
 #include <vector>
 #include <string>
-#include "Mesh.h"
 
 class ModelLoader {
 public:
@@ -25,6 +24,14 @@ public:
         ProcessNode(scene->mRootNode, scene);
         return true;
     }
+
+
+    // 获取加载的网格
+    const std::vector<Mesh>& GetMeshes() const {
+        return meshes;
+    }
+
+
 
 private:
     // 处理节点中的每个网格

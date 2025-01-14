@@ -11,7 +11,7 @@
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
 #include "../Src/Render/shader.h"
 // 封装顶点缓冲区类，管理顶点数据
-#include "../Src/Render/vertex_buffer.h"
+#include "../Src/Render/mesh.h"
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"
 
