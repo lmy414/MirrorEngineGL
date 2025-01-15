@@ -16,7 +16,9 @@
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"
 //封装渲染管线类
-#include"../Src/Render/Render.h"
+//#include"../Src/Render/Render.h"
+//封装着色器类
+#include"../Src/Render/material.h"
 
 
 // 工具模块

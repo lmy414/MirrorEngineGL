@@ -165,13 +165,13 @@
     <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Gui\gui.h" />
     <ClInclude Include="Src\Render\camera.h" />
+    <ClInclude Include="Src\Render\material.h" />
     <ClInclude Include="Src\Render\mesh_render.h" />
     <ClInclude Include="Src\Render\opengl_utils.h" />
     <ClInclude Include="Src\Render\shader.h" />
     <ClInclude Include="Src\Common.h" />
     <ClInclude Include="Src\Resources\ModelLoader.h.h" />
     <ClInclude Include="Src\Tool\MatrixManager.h" />
-    <ClInclude Include="Src\Utils\matrix_utils.h" />
     <ClInclude Include="Src\Resources\stb_image.h" />
     <ClInclude Include="Src\Resources\textureLoader.h" />
   </ItemGroup>

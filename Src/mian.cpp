@@ -54,7 +54,7 @@ int main() {
     imguiManager.Initialize(window);
     
     // 初始颜色值和旋转角度
-    float triangleColor[3] = { 0.5f, 0.2f, 0.8f };
+    float triangleColor[3] = { 0.0f, 0.0f, 0.0f };
     float rotationAngles[3] = { 0.0f, 0.0f, 0.0f }; // X, Y, Z 轴的旋转角度
 
     // 主渲染循环
@@ -69,11 +69,14 @@ int main() {
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
 
+        Material mat(glm::vec3(triangleColor[0], triangleColor[1], triangleColor[2]));
+        mat.SetMaterialUniforms(shader);//创建材质实例
+
         // 使用着色器程序
         shader.use();
-
+        
         // 清空屏幕
-        glClearColor(triangleColor[0], triangleColor[1], triangleColor[2], 1.0f); // 使用动态颜色
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // 使用动态颜色
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 渲染每个网格
