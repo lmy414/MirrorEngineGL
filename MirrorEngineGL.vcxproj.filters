@@ -51,16 +51,16 @@
     <ClCompile Include="Src\Render\shader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="Src\Render\vertex_buffer.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Utils\stb_image.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="Src\Utils\textureLoader.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="Src\Core\InputManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Resources\stb_image.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Src\Resources\textureLoader.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\ImGuiFileDialog.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -101,34 +101,40 @@
     <ClInclude Include="Src\Render\shader.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Render\vertex_buffer.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Render\camera.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\Common.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\MatrixManager.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Utils\matrix_utils.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Utils\stb_image.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Src\Utils\textureLoader.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Src\Core\InputManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\ModelLoader.h.h">
+    <ClInclude Include="Src\Render\render_mesh.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Utils\mesh.h">
+    <ClInclude Include="Src\Resources\ModelLoader.h.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Tool\MatrixManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Resources\stb_image.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Resources\textureLoader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImGuiFileDialog.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\ImGuiFileDialogConfig.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\dirent.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

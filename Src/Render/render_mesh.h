@@ -6,9 +6,8 @@
 #include <vector>
 #include <string>
 #include <glad/glad.h>
-#include "shader.h" // 假设你有一个 Shader 类
+#include "shader.h"  // 假设你有一个 Shader 类
 #include <glm/gtc/type_ptr.hpp>
-
 
 // 用于表示网格中的一个顶点
 struct Vertex {
@@ -29,6 +28,7 @@ public:
 
     // 构造函数：从 Assimp 的 aiMesh 填充 Mesh 数据
     Mesh(const aiMesh* mesh) {
+        // 处理顶点数据
         for (unsigned int i = 0; i < mesh->mNumVertices; i++) {
             Vertex vertex;
             // 顶点位置

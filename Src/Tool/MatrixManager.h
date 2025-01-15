@@ -39,11 +39,13 @@ public:
     }
 
     // 设置透视投影矩阵（固定视场角）
-    void SetFixedPerspectiveProjection(float fov, float nearPlane, float farPlane) {
+    void SetFixedPerspectiveProjection(float fov, float nearPlane, float farPlane, float aspectRatio) {
+        // 更新成员变量
         this->fov = fov;
         this->nearPlane = nearPlane;
         this->farPlane = farPlane;
-        UpdateProjectionMatrix();
+        // 更新投影矩阵
+        UpdateProjectionMatrix(fov, aspectRatio, nearPlane, farPlane);
     }
 
     // 获取投影矩阵
@@ -52,9 +54,8 @@ public:
     }
 
     // 更新投影矩阵，基于当前窗口大小
-    void UpdateProjectionMatrix() {
-        // 计算当前的宽高比（aspect ratio）
-        float aspectRatio = static_cast<float>(windowWidth) / static_cast<float>(windowHeight);
+    void UpdateProjectionMatrix(float fov, float aspectRatio, float nearPlane, float farPlane) {
+        // 使用传递的参数计算透视投影矩阵
         projectionMatrix = glm::perspective(glm::radians(fov), aspectRatio, nearPlane, farPlane);
     }
 
@@ -62,7 +63,10 @@ public:
     void SetWindowSize(int width, int height) {
         windowWidth = width;
         windowHeight = height;
-        UpdateProjectionMatrix(); // 每次窗口大小变化时，更新投影矩阵
+        // 计算新的纵横比
+        float aspectRatio = (float)width / (float)height;
+        // 更新投影矩阵
+        UpdateProjectionMatrix(fov, aspectRatio, nearPlane, farPlane);
     }
 
 private:

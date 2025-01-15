@@ -4,13 +4,14 @@
 // GUI 模块
 // 管理图形用户界面的相关操作
 #include "../Src/gui/gui.h"
+#include "../imgui/ImGuiFileDialog.h"
 
 // 渲染模块
 // 封装了 OpenGL 常用工具函数
 #include "../Src/Render/opengl_utils.h"
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
 #include "../Src/Render/shader.h"
-// 封装顶点缓冲区类，管理顶点数据
+// 封装网格渲染，渲染一个网格对象
 #include "../Src/Render/render_mesh.h"
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"

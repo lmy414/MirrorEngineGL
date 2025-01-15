@@ -133,6 +133,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="imgui\imgui.cpp" />
+    <ClCompile Include="imgui\ImGuiFileDialog.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
     <ClCompile Include="imgui\imgui_impl_glfw.cpp" />
@@ -149,8 +150,11 @@
     <ClCompile Include="Src\Resources\textureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="imgui\dirent.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
+    <ClInclude Include="imgui\ImGuiFileDialog.h" />
+    <ClInclude Include="imgui\ImGuiFileDialogConfig.h" />
     <ClInclude Include="imgui\imgui_impl_glfw.h" />
     <ClInclude Include="imgui\imgui_impl_opengl3.h" />
     <ClInclude Include="imgui\imgui_impl_opengl3_loader.h" />
