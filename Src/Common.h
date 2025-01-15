@@ -19,6 +19,8 @@
 //#include"../Src/Render/Render.h"
 //封装着色器类
 #include"../Src/Render/material.h"
+//封装光源类
+#include"../Src/Render/directionalLight.h"
 
 
 // 工具模块

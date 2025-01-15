@@ -3,6 +3,12 @@
 // 全局相机对象
 Core::Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));  // 初始化相机位置
 
+DirectionalLight dirLight(
+    glm::vec3(-0.2f, -1.0f, -0.3f),   // 光源方向
+    glm::vec3(1.0f, 1.0f, 1.0f),       // 白色光源
+    1.0f                               // 光照强度
+);
+
 float mouseSpeed = 0.1f; // 鼠标灵敏度
 float moveSpeed = 0.1f;  // 键盘移动速度
 
@@ -57,6 +63,8 @@ int main() {
     float triangleColor[3] = { 0.0f, 0.0f, 0.0f };
     float rotationAngles[3] = { 0.0f, 0.0f, 0.0f }; // X, Y, Z 轴的旋转角度
 
+    shader.setVec3("viewPos", camera.Position);//获取相机位置
+
     // 主渲染循环
     while (!glfwWindowShouldClose(window)) {
         // 获取帧时间
@@ -68,6 +76,8 @@ int main() {
         // 获取矩阵
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
+
+        dirLight.SetLightUniforms(shader);  // 设置光源 uniform 到着色器中
 
         Material mat(glm::vec3(triangleColor[0], triangleColor[1], triangleColor[2]));
         mat.SetMaterialUniforms(shader);//创建材质实例
@@ -138,7 +148,20 @@ int main() {
         ImGui::Text("Mouse Speed:");
         ImGui::SliderFloat("Mouse Sensitivity", &mouseSpeed, 0.01f, 1.0f); // 控制鼠标灵敏度
         ImGui::SliderFloat("Move Speed", &moveSpeed, 0.1f, 10.0f); // 设置范围从 0.1 到 10.0
-
+        ImGui::End();
+        
+        ImGui::Begin("Lighting Control");
+        // 修改光照方向
+        ImGui::SliderFloat("Light Direction X", &dirLight.direction.x, -1.0f, 1.0f);
+        ImGui::SliderFloat("Light Direction Y", &dirLight.direction.y, -1.0f, 1.0f);
+        ImGui::SliderFloat("Light Direction Z", &dirLight.direction.z, -1.0f, 1.0f);
+        
+        // 修改光源颜色
+        ImGui::ColorEdit3("Light Color", &dirLight.color[0]);
+        
+        // 修改光照强度
+        ImGui::SliderFloat("Light Intensity", &dirLight.intensity, 0.0f, 10.0f);
+        
         ImGui::End();
 
         imguiManager.EndFrame();
