@@ -61,6 +61,10 @@ int main() {
     ImGuiManager imguiManager;
     imguiManager.Initialize(window);
 
+
+    CreateOpenGLTexture(1920, 1080);
+
+
     // 初始颜色值和旋转角度
     float triangleColor[3] = { 0.5f, 0.2f, 0.8f };
     float rotationAngles[3] = { 0.0f, 0.0f, 0.0f }; // X, Y, Z 轴的旋转角度
@@ -143,6 +147,7 @@ int main() {
         ImGui::Text("Mouse Speed:");
         ImGui::SliderFloat("Mouse Sensitivity", &mouseSpeed, 0.01f, 1.0f); // 控制鼠标灵敏度
         ImGui::SliderFloat("Move Speed", &moveSpeed, 0.1f, 10.0f); // 设置范围从 0.1 到 10.0
+
         ImGui::End();
 
         imguiManager.EndFrame();
