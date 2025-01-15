@@ -165,7 +165,7 @@
     <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Gui\gui.h" />
     <ClInclude Include="Src\Render\camera.h" />
-    <ClInclude Include="Src\Render\render_mesh.h" />
+    <ClInclude Include="Src\Render\mesh_render.h" />
     <ClInclude Include="Src\Render\opengl_utils.h" />
     <ClInclude Include="Src\Render\shader.h" />
     <ClInclude Include="Src\Common.h" />

@@ -113,9 +113,6 @@
     <ClInclude Include="Src\Core\InputManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="Src\Render\render_mesh.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="Src\Resources\ModelLoader.h.h">
       <Filter>头文件</Filter>
     </ClInclude>
@@ -135,6 +132,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="imgui\dirent.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="Src\Render\mesh_render.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
