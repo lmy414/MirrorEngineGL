@@ -1,13 +1,14 @@
 #include "TextureLoader.h"
 #include <iostream>
 
-unsigned int TextureLoader::LoadTexture(const std::string& path, bool flipVertically, GLenum wrapS, GLenum wrapT, GLenum minFilter, GLenum magFilter) {
-    // 加载纹理
+unsigned int TextureLoader::LoadTexture(const std::string& path, bool flipVertically, 
+                                        GLenum wrapS, GLenum wrapT, 
+                                        GLenum minFilter, GLenum magFilter) {
     unsigned int textureID;
     glGenTextures(1, &textureID);
     glBindTexture(GL_TEXTURE_2D, textureID);
 
-    // 设置纹理环绕和过滤参数
+    // 设置纹理参数
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrapT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, minFilter);
@@ -24,11 +25,16 @@ unsigned int TextureLoader::LoadTexture(const std::string& path, bool flipVertic
 
         glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
-    }
-    else {
+    } else {
         std::cerr << "Failed to load texture: " << path << std::endl;
+        textureID = 0;  // 如果加载失败，返回 0
     }
     stbi_image_free(data);
 
     return textureID;
+}
+
+void TextureLoader::ClearTextures() {
+    // 清理纹理
+    // 例如：glDeleteTextures(textureCount, textureArray);
 }

@@ -14,6 +14,7 @@ float moveSpeed = 0.1f;  // 键盘移动速度
 
 InputManager* inputManager = nullptr;  // 输入管理器
 
+
 //全局缓冲对象变量
 unsigned int VBO, VAO, EBO;
 
@@ -50,6 +51,7 @@ int main() {
 
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
+    unsigned int diffuseTexture = TextureLoader::LoadTexture("Assets/tex/6-1948-2.png");//加载纹理
 
     // 加载模型
     ModelLoader modelLoader;
@@ -77,10 +79,11 @@ int main() {
         glm::mat4 view = camera.GetViewMatrix();
         glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
 
-        dirLight.SetLightUniforms(shader);  // 设置光源 uniform 到着色器中
-
-        Material mat(glm::vec3(triangleColor[0], triangleColor[1], triangleColor[2]));
+        dirLight.SetLightUniforms(shader);  // 设置光源 uniform 到着色器
+        
+        Material mat(glm::vec3(triangleColor[0], triangleColor[1], triangleColor[2]), diffuseTexture);
         mat.SetMaterialUniforms(shader);//创建材质实例
+       
 
         // 使用着色器程序
         shader.use();

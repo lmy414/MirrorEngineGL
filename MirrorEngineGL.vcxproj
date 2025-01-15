@@ -176,6 +176,10 @@
     <ClInclude Include="Src\Resources\stb_image.h" />
     <ClInclude Include="Src\Resources\textureLoader.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\m\cs.fbx" />
+    <Content Include="Assets\tex\6-1948-2.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
