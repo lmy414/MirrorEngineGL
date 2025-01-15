@@ -7,6 +7,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
+#include "../Render/mesh_render.h"
 
 class ModelLoader {
 public:
@@ -41,18 +42,12 @@ private:
             return false;
         }
 
+        // 递归处理节点并提取网格
+        ProcessNode(scene->mRootNode, scene, modelMeshes);
+
         return true;
     }
 
-
-    // 获取加载的网格
-    const std::vector<Mesh>& GetMeshes() const {
-        return meshes;
-    }
-
-
-
-private:
     // 处理节点中的每个网格
     void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Mesh>& modelMeshes) {
         for (unsigned int i = 0; i < node->mNumMeshes; i++) {

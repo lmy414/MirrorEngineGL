@@ -11,11 +11,6 @@ InputManager* inputManager = nullptr;  // 输入管理器
 //全局缓冲对象变量
 unsigned int VBO, VAO, EBO;
 
-void framebuffer_size_callback1(GLFWwindow* window, int width, int height) {
-    
-    glViewport(0, 0, width, height);
-}
-
 int main() {
     // 初始化 OpenGL 和窗口
     GLFWwindow* window = InitializeOpenGL(1920, 1080, "E Mao Engine");
@@ -47,9 +42,6 @@ int main() {
     // 设置矩阵管理器为窗口的用户数据
     glfwSetWindowUserPointer(window, &matrixManager);
 
-    // 注册窗口大小回调函数
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback1);
-
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
 
@@ -60,11 +52,7 @@ int main() {
     // 初始化 ImGui
     ImGuiManager imguiManager;
     imguiManager.Initialize(window);
-
-
-    CreateOpenGLTexture(1920, 1080);
-
-
+    
     // 初始颜色值和旋转角度
     float triangleColor[3] = { 0.5f, 0.2f, 0.8f };
     float rotationAngles[3] = { 0.0f, 0.0f, 0.0f }; // X, Y, Z 轴的旋转角度

@@ -12,7 +12,7 @@
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
 #include "../Src/Render/shader.h"
 // 封装网格渲染，渲染一个网格对象
-#include "../Src/Render/render_mesh.h"
+#include "../Src/Render/mesh_render.h"
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"
 //封装渲染管线类
