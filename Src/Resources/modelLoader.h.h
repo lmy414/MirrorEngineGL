@@ -7,7 +7,7 @@
 #include <vector>
 #include <string>
 #include <iostream>
-#include "../Render/mesh_render.h"
+#include "../Render/Mesh.h"
 
 class modelLoader {
 public:

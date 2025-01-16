@@ -8,19 +8,19 @@
 
 // 渲染模块
 // 封装了 OpenGL 常用工具函数
-#include "../Src/Render/opengl_utils.h"
+#include "../Src/Render/Opengl_utils.h"
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
-#include "../Src/Render/shader.h"
+#include "../Src/Render/Shader.h"
 // 封装网格渲染，渲染一个网格对象
-#include "../Src/Render/mesh_render.h"
+#include "../Src/Render/Mesh.h"
 //封装摄像机，管理相机位置，方向，视角等
 #include"../Src/Render/Camera.h"
 //封装渲染管线类
 //#include"../Src/Render/Render.h"
 //封装着色器类
-#include"../Src/Render/material.h"
+#include"../Src/Render/Material.h"
 //封装光源类
-#include"../Src/Render/directionalLight.h"
+#include"../Src/Render/DirectionalLight.h"
 
 
 // 工具模块
@@ -30,7 +30,7 @@
 
 //资源模块
 // 纹理加载器，负责加载纹理数据并绑定到 OpenGL 的纹理对象
-#include "../Src/Resources/textureLoader.h"
+#include "../Src/Resources/TextureLoader.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
 #include "../Src/Resources/modelLoader.h.h"
 

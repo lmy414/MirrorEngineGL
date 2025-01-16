@@ -7,7 +7,7 @@
 #include <string>
 #include <glad/glad.h>
 //#include "Tool/math.h"  
-#include "shader.h"
+#include "Shader.h"
 
 // 用于表示网格中的一个顶点
 struct Vertex {

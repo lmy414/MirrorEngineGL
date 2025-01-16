@@ -4,7 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-class math
+class Math
 {
 public:
     // 手动实现 clamp 函数

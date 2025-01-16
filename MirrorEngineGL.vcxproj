@@ -143,11 +143,11 @@
     <ClCompile Include="Src\Core\InputManager.cpp" />
     <ClCompile Include="Src\glad.c" />
     <ClCompile Include="Src\Gui\gui.cpp" />
-    <ClCompile Include="Src\mian.cpp" />
-    <ClCompile Include="Src\Render\opengl_utils.cpp" />
-    <ClCompile Include="Src\Render\shader.cpp" />
+    <ClCompile Include="Src\Mian.cpp" />
+    <ClCompile Include="Src\Render\Opengl_utils.cpp" />
+    <ClCompile Include="Src\Render\Shader.cpp" />
     <ClCompile Include="Src\Resources\stb_image.cpp" />
-    <ClCompile Include="Src\Resources\textureLoader.cpp" />
+    <ClCompile Include="Src\Resources\TextureLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\dirent.h" />
@@ -165,17 +165,17 @@
     <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Gui\gui.h" />
     <ClInclude Include="Src\Render\camera.h" />
-    <ClInclude Include="Src\Render\directionalLight.h" />
-    <ClInclude Include="Src\Render\material.h" />
-    <ClInclude Include="Src\Render\mesh_render.h" />
-    <ClInclude Include="Src\Render\opengl_utils.h" />
-    <ClInclude Include="Src\Render\shader.h" />
+    <ClInclude Include="Src\Render\DirectionalLight.h" />
+    <ClInclude Include="Src\Render\Material.h" />
+    <ClInclude Include="Src\Render\Mesh.h" />
+    <ClInclude Include="Src\Render\Opengl_utils.h" />
+    <ClInclude Include="Src\Render\Shader.h" />
     <ClInclude Include="Src\Common.h" />
     <ClInclude Include="Src\Resources\modelLoader.h.h" />
-    <ClInclude Include="Src\Tool\math.h" />
+    <ClInclude Include="Src\Tool\Math.h" />
     <ClInclude Include="Src\Tool\MatrixManager.h" />
     <ClInclude Include="Src\Resources\stb_image.h" />
-    <ClInclude Include="Src\Resources\textureLoader.h" />
+    <ClInclude Include="Src\Resources\TextureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\m\cs.fbx" />
