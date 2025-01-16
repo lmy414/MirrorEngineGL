@@ -9,7 +9,7 @@
 #include <iostream>
 #include "../Render/mesh_render.h"
 
-class ModelLoader {
+class modelLoader {
 public:
     // 存储所有加载的模型的网格
     std::vector<std::vector<Mesh>> allMeshes;  // 每个模型的 Meshs 列表

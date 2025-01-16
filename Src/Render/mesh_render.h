@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <glad/glad.h>
+#include "Tool/math.h"  
 #include "shader.h" // 假设你有一个 Shader 类
 
 // 用于表示网格中的一个顶点
@@ -35,9 +36,20 @@ public:
             vertex.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
             // 顶点纹理坐标
             if (mesh->mTextureCoords[0]) {
-                vertex.texCoords = glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+                // 检查纹理坐标是否有效，确保在 [0, 1] 范围内
+                float u = mesh->mTextureCoords[0][i].x;
+                float v = mesh->mTextureCoords[0][i].y;
+
+                //std::cout << "Vertex " << i << ": UV (" << u << ", " << v << ")\n";
+
+                // 如果超出了有效范围 [0, 1]，可以设置为默认值或进行修正
+                //u = math::clamp(u, 0.0f, 1.0f);
+                //v = math::clamp(v, 0.0f, 1.0f);
+
+                vertex.texCoords = glm::vec2(u,  1.0f - v);//blender创建的uv和opengl的uv坐标系不同，需要翻转v轴
             } else {
-                vertex.texCoords = glm::vec2(0.0f, 0.0f); // 默认值
+                // 如果没有纹理坐标，则提供一个默认值 (如 0, 0)
+                vertex.texCoords = glm::vec2(0.0f, 0.0f);
             }
             // 切线与副切线
             if (mesh->mTangents) {

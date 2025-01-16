@@ -51,10 +51,10 @@ int main() {
 
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
-    unsigned int diffuseTexture = TextureLoader::LoadTexture("Assets/tex/6-1948-2.png");//加载纹理
+    unsigned int diffuseTexture = TextureLoader::LoadTexture("Assets/tex/cs3.png");//加载纹理
 
     // 加载模型
-    ModelLoader modelLoader;
+    modelLoader modelLoader;
     const auto& allMeshes = modelLoader.GetAllMeshes();  // 获取所有加载的网格数据
 
     // 初始化 ImGui
@@ -80,7 +80,6 @@ int main() {
         glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
 
         dirLight.SetLightUniforms(shader);  // 设置光源 uniform 到着色器
-        
         Material mat(glm::vec3(triangleColor[0], triangleColor[1], triangleColor[2]), diffuseTexture);
         mat.SetMaterialUniforms(shader);//创建材质实例
        
@@ -89,7 +88,7 @@ int main() {
         shader.use();
         
         // 清空屏幕
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // 使用动态颜色
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // 黑色
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // 渲染每个网格

@@ -171,14 +171,18 @@
     <ClInclude Include="Src\Render\opengl_utils.h" />
     <ClInclude Include="Src\Render\shader.h" />
     <ClInclude Include="Src\Common.h" />
-    <ClInclude Include="Src\Resources\ModelLoader.h.h" />
+    <ClInclude Include="Src\Resources\modelLoader.h.h" />
+    <ClInclude Include="Src\Tool\math.h" />
     <ClInclude Include="Src\Tool\MatrixManager.h" />
     <ClInclude Include="Src\Resources\stb_image.h" />
     <ClInclude Include="Src\Resources\textureLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\m\cs.fbx" />
+    <Content Include="Assets\m\cs2.fbx" />
     <Content Include="Assets\tex\6-1948-2.png" />
+    <Content Include="Assets\tex\cs2.png" />
+    <Content Include="Assets\tex\cs3.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
