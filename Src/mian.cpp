@@ -110,32 +110,49 @@ int main() {
         // 启动 ImGui 界面
         imguiManager.BeginFrame();
 
-        if (ImGui::Button("Reset Camera")) {
-            camera.ResetCamera();  // 重置相机到初始位置和朝向
-        }
+        // 设置菜单栏窗口的大小和位置
+        ImGui::SetNextWindowSize(ImVec2(1530, 30));   // 设置窗口的大小为 1530x30
+        ImGui::SetNextWindowPos(ImVec2(ImGui::GetIO().DisplaySize.x - 1530, 0));  // 设置窗口的位置为右上角
 
-        if (ImGui::Button("Open Model")) {
-            // 打开文件选择对话框
-            ImGuiFileDialog::Instance()->OpenDialog("ChooseModelDlgKey", "Choose a model file", ".obj,.fbx");
-        }
+        // 创建一个菜单栏窗口
+        ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(1.0f, 0.647f, 0.0f, 1.0f));  // RGB(255, 165, 0) 是橙色
 
-        // 如果文件选择对话框打开并且选择了文件
-        if (ImGuiFileDialog::Instance()->Display("ChooseModelDlgKey")) {
-            if (ImGuiFileDialog::Instance()->IsOk()) {
-                std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();  // 获取文件路径
-                std::cout << "Selected model: " << filePath << std::endl;
+    if (ImGui::Begin("Menu Bar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoBackground)) {
+    // 放置按钮，并设置按钮大小
+    if (ImGui::Button(u8"重置相机", ImVec2(60, 30))) {
+        camera.ResetCamera();  // 重置相机到初始位置和朝向
+    }
 
-                // 加载选择的模型文件
-                std::vector<std::string> newModelPaths = { filePath };
-                if (!modelLoader.LoadModels(newModelPaths)) {
-                    std::cerr << "Failed to load selected model!" << std::endl;
-                }
-                else {
-                    std::cout << "Model loaded successfully!" << std::endl;
-                }
-            }
-            ImGuiFileDialog::Instance()->Close();  // 关闭对话框
+    ImGui::SameLine();  // 保持按钮在同一行
+
+    if (ImGui::Button(u8"加载模型", ImVec2(60, 30))) {
+        // 打开文件选择对话框
+        ImGuiFileDialog::Instance()->OpenDialog("ChooseModelDlgKey", "Choose a model file", ".obj,.fbx");
+    }
+
+    ImGui::End();  // 结束菜单栏窗口
+}
+
+    // 恢复原来的颜色设置
+    ImGui::PopStyleColor();
+
+    // 如果文件选择对话框打开并且选择了文件
+    if (ImGuiFileDialog::Instance()->Display("ChooseModelDlgKey")) {
+    if (ImGuiFileDialog::Instance()->IsOk()) {
+        std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();  // 获取文件路径
+        std::cout << "Selected model: " << filePath << std::endl;
+
+        // 加载选择的模型文件
+        std::vector<std::string> newModelPaths = { filePath };
+        if (!modelLoader.LoadModels(newModelPaths)) {
+            std::cerr << "Failed to load selected model!" << std::endl;
         }
+        else {
+            std::cout << "Model loaded successfully!" << std::endl;
+        }
+    }
+    ImGuiFileDialog::Instance()->Close();  // 关闭对话框
+}
 
         // Cube 控制面板
         ImGui::Begin("Cube Control");

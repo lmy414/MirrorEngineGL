@@ -18,7 +18,7 @@ public:
     void Shutdown();
 
 private:
-    bool initialized = false;
+    bool initialized = false;       
 };
 
 #endif // IMGUIMANAGER_H

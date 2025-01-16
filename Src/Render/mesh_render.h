@@ -6,8 +6,8 @@
 #include <vector>
 #include <string>
 #include <glad/glad.h>
-#include "Tool/math.h"  
-#include "shader.h" // 假设你有一个 Shader 类
+//#include "Tool/math.h"  
+#include "shader.h"
 
 // 用于表示网格中的一个顶点
 struct Vertex {
@@ -81,10 +81,9 @@ public:
     void Render( Shader& shader, const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection) const {
         shader.use();
         // 传递变换矩阵到着色器
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "model"), 1, GL_FALSE, glm::value_ptr(model));
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "view"), 1, GL_FALSE, glm::value_ptr(view));
-        glUniformMatrix4fv(glGetUniformLocation(shader.ID, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
+        shader.setMat4("model", model);
+        shader.setMat4("view", view);
+        shader.setMat4("projection", projection);
         // 绑定 VAO
         glBindVertexArray(VAO);
         // 绘制网格
