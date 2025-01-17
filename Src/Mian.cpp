@@ -51,7 +51,7 @@ int main() {
 
     // 创建 Shader 对象并加载着色器
     Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
-    unsigned int diffuseTexture = TextureLoader::LoadTexture("Assets/tex/cs3.png");//加载纹理
+    unsigned int diffuseTexture = Texture::LoadTexture("Assets/tex/cs3.png");//加载纹理
 
     // 加载模型
     modelLoader modelLoader;
@@ -174,12 +174,16 @@ int main() {
         ImGui::SliderFloat("Light Direction X", &dirLight.direction.x, -1.0f, 1.0f);
         ImGui::SliderFloat("Light Direction Y", &dirLight.direction.y, -1.0f, 1.0f);
         ImGui::SliderFloat("Light Direction Z", &dirLight.direction.z, -1.0f, 1.0f);
-        
+        dirLight.SetDirection(dirLight.direction);  // 使用新方法
+
         // 修改光源颜色
         ImGui::ColorEdit3("Light Color", &dirLight.color[0]);
-        
+        dirLight.SetColor(dirLight.color);  // 使用新方法
+
         // 修改光照强度
         ImGui::SliderFloat("Light Intensity", &dirLight.intensity, 0.0f, 10.0f);
+        dirLight.SetIntensity(dirLight.intensity);  // 使用新方法
+
         
         ImGui::End();
 

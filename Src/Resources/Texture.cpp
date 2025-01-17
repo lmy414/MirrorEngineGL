@@ -1,7 +1,7 @@
-#include "TextureLoader.h"
+#include "Texture.h"
 #include <iostream>
 
-unsigned int TextureLoader::LoadTexture(const std::string& path, bool flipVertically, 
+unsigned int Texture::LoadTexture(const std::string& path, bool flipVertically, 
                                         GLenum wrapS, GLenum wrapT, 
                                         GLenum minFilter, GLenum magFilter) {
     unsigned int textureID;
@@ -35,7 +35,7 @@ unsigned int TextureLoader::LoadTexture(const std::string& path, bool flipVertic
     return textureID;
 }
 
-void TextureLoader::ClearTextures() {
+void Texture::ClearTextures() {
     // 清理纹理
     // 例如：glDeleteTextures(textureCount, textureArray);
 }

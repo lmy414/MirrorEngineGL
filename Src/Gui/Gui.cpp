@@ -1,4 +1,4 @@
-#include "gui.h"
+#include "Gui.h"
 
 ImGuiManager::ImGuiManager() : initialized(false) {}
 

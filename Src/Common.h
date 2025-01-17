@@ -3,7 +3,7 @@
 
 // GUI 模块
 // 管理图形用户界面的相关操作
-#include "../Src/gui/gui.h"
+#include "../Src/gui/Gui.h"
 #include "../imgui/ImGuiFileDialog.h"
 
 // 渲染模块
@@ -20,7 +20,7 @@
 //封装着色器类
 #include"../Src/Render/Material.h"
 //封装光源类
-#include"../Src/Render/DirectionalLight.h"
+#include"../Src/Render/Light//DirectionalLight.h"
 
 
 // 工具模块
@@ -30,9 +30,9 @@
 
 //资源模块
 // 纹理加载器，负责加载纹理数据并绑定到 OpenGL 的纹理对象
-#include "../Src/Resources/TextureLoader.h"
+#include "../Src/Resources/Texture.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
-#include "../Src/Resources/modelLoader.h.h"
+#include "../Src/Resources/Model.h"
 
 //核心模块
 //输入管理器，处理键盘和鼠标输入

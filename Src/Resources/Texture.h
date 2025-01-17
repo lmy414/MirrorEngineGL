@@ -5,7 +5,7 @@
 #include "stb_image.h"
 
 
-class TextureLoader {
+class Texture {
 public:
     // º”‘ÿ2DŒ∆¿Ì
     static unsigned int LoadTexture(const std::string& path, bool flipVertically = true, 

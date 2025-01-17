@@ -2,7 +2,7 @@
 #define DIRECTIONAL_LIGHT_H
 
 #include <glm/glm.hpp>
-#include "Shader.h"
+#include "../Shader.h"
 
 class DirectionalLight {
 public:
@@ -22,6 +22,36 @@ public:
         shader.setVec3("Direction", direction);
         shader.setVec3("LightColor", color);
         shader.setFloat("Intensity", intensity);
+    }
+
+    // 控制光照方向
+    void SetDirection(const glm::vec3& newDirection) {
+        direction = newDirection;
+    }
+
+    // 控制光照颜色
+    void SetColor(const glm::vec3& newColor) {
+        color = newColor;
+    }
+
+    // 控制光照强度
+    void SetIntensity(float newIntensity) {
+        intensity = newIntensity;
+    }
+
+    // 获取光照方向
+    glm::vec3 GetDirection() const {
+        return direction;
+    }
+
+    // 获取光照颜色
+    glm::vec3 GetColor() const {
+        return color;
+    }
+
+    // 获取光照强度
+    float GetIntensity() const {
+        return intensity;
     }
 };
 

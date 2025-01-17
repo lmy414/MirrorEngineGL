@@ -11,6 +11,7 @@
 #include <filesystem>
 #include <glm/gtc/type_ptr.hpp>  // 添加这个头文件
 class Shader {
+    
 public:
     // 构造函数：加载并编译着色器
     Shader(const char* vertexPath, const char* fragmentPath);
