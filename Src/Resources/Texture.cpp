@@ -1,41 +1,111 @@
 #include "Texture.h"
-#include <iostream>
 
-unsigned int Texture::LoadTexture(const std::string& path, bool flipVertically, 
-                                        GLenum wrapS, GLenum wrapT, 
-                                        GLenum minFilter, GLenum magFilter) {
-    unsigned int textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    
-    // 纹理参数设置
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);  // 水平方向重复
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);  // 垂直方向重复
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);  // 缩小时使用线性过滤
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);  // 放大时使用最近邻过滤
+std::map<std::string, Texture2D*> Texture2D::LoadedTextures;
 
-
-    // 加载图片并生成纹理
-    stbi_set_flip_vertically_on_load(flipVertically);
-    int width, height, nrChannels;
-    unsigned char* data = stbi_load(path.c_str(), &width, &height, &nrChannels, 0);
-    if (data) {
-        GLenum format = GL_RGB;
-        if (nrChannels == 4) format = GL_RGBA;
-        else if (nrChannels == 1) format = GL_RED;
-
-        glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-        glGenerateMipmap(GL_TEXTURE_2D);
-    } else {
-        std::cerr << "Failed to load texture: " << path << std::endl;
-        textureID = 0;  // 如果加载失败，返回 0
-    }
-    stbi_image_free(data);
-
-    return textureID;
+Texture2D::Texture2D(std::string _path, ETexType type, bool _is_editor) :
+    path(_path),
+    tex_type(type),
+    is_editor(_is_editor)
+{
+    is_valid = LoadTexture2D(path.c_str(), type);
 }
 
-void Texture::ClearTextures() {
-    // 清理纹理
-    // 例如：glDeleteTextures(textureCount, textureArray);
+Texture2D::Texture2D(const char* _path, ETexType type, bool _is_editor) :
+    path(_path),
+    tex_type(type),
+    is_editor(_is_editor)
+{
+    is_valid = LoadTexture2D(path.c_str(), type);
+}
+
+Texture2D::~Texture2D()
+{
+    DeleteTexture2D();
+    LoadedTextures.erase(name);
+}
+
+void Texture2D::DeleteTexture2D()
+{
+    std::cout << "Delete Texture: " << path << std::endl;
+    for (auto it : textureRefs.references)
+    {
+        it->OnTextureRemoved(path);
+    }
+
+    glDeleteTextures(1, &id);
+}
+
+bool Texture2D::LoadTexture2D(const char* texture_path, ETexType type)
+{
+    int width, height, nrComponents;
+    glGenTextures(1, &this->id);
+    glBindTexture(GL_TEXTURE_2D, this->id);
+
+    // 为当前绑定的纹理对象设置环绕、过滤方式
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    std::string path_s = texture_path;
+    std::replace(path_s.begin(), path_s.end(), '\\', '/');
+    unsigned char* data = stbi_load(path_s.c_str(), &width, &height, &nrComponents, 0);
+    if (data)
+    {
+        GLenum format;
+        this->path = path_s;
+        this->width = width;
+        this->height = height;
+        this->nrChannels = nrComponents;
+
+        if (nrChannels == 1)
+        {
+            tex_type = ETexType::RED;
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, width, height, 0, GL_RED, GL_UNSIGNED_BYTE, data);
+        }
+        else if (nrChannels == 3)
+        {
+            if (type == ETexType::SRGB || type == ETexType::SRGBA)
+            {
+                tex_type = ETexType::SRGB;
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            }
+            else
+            {
+                tex_type = ETexType::RGB;
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+            }
+        }
+        else if (nrChannels == 4)
+        {
+            if (type == ETexType::SRGB || type == ETexType::SRGBA)
+            {
+                tex_type = ETexType::SRGBA;
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_SRGB_ALPHA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            }
+            else
+            {
+                tex_type = ETexType::RGBA;
+                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+            }
+        }
+
+        glGenerateMipmap(GL_TEXTURE_2D);
+    }
+    else
+    {
+       
+        stbi_image_free(data);
+        return false;
+    }
+
+    stbi_image_free(data);
+    name = path_s.substr(path_s.find_last_of('/') + 1, path_s.size());
+    LoadedTextures.insert(std::map<std::string, Texture2D*>::value_type(name, this));
+    return true;
+}
+
+void Texture2D::ResetTextureType(ETexType type)
+{
+    LoadTexture2D(path.c_str(), type);
 }

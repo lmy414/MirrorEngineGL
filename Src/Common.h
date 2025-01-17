@@ -8,7 +8,7 @@
 
 // 渲染模块
 // 封装了 OpenGL 常用工具函数
-#include "../Src/Render/Opengl_utils.h"
+#include "../Src/Render/Opengl_Utils.h"
 // 封装着色器类，管理 OpenGL 着色器的加载、编译与使用
 #include "../Src/Render/Shader.h"
 // 封装网格渲染，渲染一个网格对象

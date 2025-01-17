@@ -1,4 +1,4 @@
-#include "Opengl_utils.h"
+#include "Opengl_Utils.h"
 #include <iostream>
 
 GLFWwindow* InitializeOpenGL(int width, int height, const char* title) {

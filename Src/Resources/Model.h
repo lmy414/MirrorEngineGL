@@ -1,65 +1,55 @@
-#ifndef MODELLOADER_H
-#define MODELLOADER_H
+ï»¿#ifndef MODEL_H
+#define MODEL_H
 
-#include <assimp/Importer.hpp>
 #include <assimp/scene.h>
-#include <assimp/postprocess.h>
 #include <vector>
 #include <string>
-#include <iostream>
+#include <map>
+#include <filesystem>
+#include "Texture.h"
 #include "../Render/Mesh.h"
 
-class modelLoader {
+class Model {
 public:
-    // ´æ´¢ËùÓĞ¼ÓÔØµÄÄ£ĞÍµÄÍø¸ñ
-    std::vector<std::vector<Mesh>> allMeshes;  // Ã¿¸öÄ£ĞÍµÄ Meshs ÁĞ±í
+    // å·²åŠ è½½çº¹ç†ï¼Œé¿å…é‡å¤åŠ è½½
+    std::vector<Texture2D*> textures_loaded;  
+    // ç½‘æ ¼åˆ—è¡¨
+    std::vector<Mesh*> meshes;  
+    // æ¨¡å‹æ–‡ä»¶æ‰€åœ¨ç›®å½•
+    std::string directory;  
+    // æ¨¡å‹æ–‡ä»¶è·¯å¾„
+    std::string mesh_path;  
+    // ä¼½é©¬æ ¡æ­£æ ‡è®°
+    bool gammaCorrection;  
+    // æ¨¡å‹åç§°
+    std::string name;  
 
-    // ¼ÓÔØ¶à¸öÂ·¾¶µÄÄ£ĞÍ
-    bool LoadModels(const std::vector<std::string>& paths) {
-        for (const auto& path : paths) {
-            std::vector<Mesh> modelMeshes;
-            if (!LoadModel(path, modelMeshes)) {
-                return false;  // Èç¹û¼ÓÔØÄ³¸öÄ£ĞÍÊ§°Ü£¬Ôò·µ»Ø false
-            }
-            allMeshes.push_back(modelMeshes);  // ½«Ã¿¸ö¼ÓÔØµÄÄ£ĞÍÌí¼Óµ½ÈİÆ÷ÖĞ
-        }
-        return true;
-    }
+    // é™æ€å­˜å‚¨å·²åŠ è½½æ¨¡å‹
+    static std::map<std::string, Model*> LoadedModel;
 
-    // »ñÈ¡ËùÓĞ¼ÓÔØµÄÍø¸ñ
-    const std::vector<std::vector<Mesh>>& GetAllMeshes() const {
-        return allMeshes;
-    }
+    // ç¼–è¾‘å™¨èµ„æºï¼Œå¼•ç”¨åœºæ™¯æ¨¡å‹
+    //EditorResource<SceneModel*> refSceneModels; 
 
+    // æ„é€ å‡½æ•°ï¼Œæ¥å—æ–‡ä»¶è·¯å¾„å’Œä¼½é©¬æ ¡æ­£æ ‡è®°
+    Model(std::string const &path, bool gamma = false);
+    //Model(std::filesystem::path path, bool gamma = false);
+    Model() : gammaCorrection(false), mesh_path("") {}//é»˜è®¤çš„æ„é€ å‡½æ•°
+
+    // ææ„å‡½æ•°ï¼Œé‡Šæ”¾èµ„æº
+    ~Model();
+    
 private:
-    // ¼ÓÔØµ¥¸öÄ£ĞÍ£¬²¢½«ÆäÍø¸ñ´æ´¢µ½ modelMeshes ÖĞ
-    bool LoadModel(const std::string& path, std::vector<Mesh>& modelMeshes) {
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
-
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-            std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
-            return false;
-        }
-
-        // µİ¹é´¦Àí½Úµã²¢ÌáÈ¡Íø¸ñ
-        ProcessNode(scene->mRootNode, scene, modelMeshes);
-
-        return true;
-    }
-
-    // ´¦Àí½ÚµãÖĞµÄÃ¿¸öÍø¸ñ
-    void ProcessNode(aiNode* node, const aiScene* scene, std::vector<Mesh>& modelMeshes) {
-        for (unsigned int i = 0; i < node->mNumMeshes; i++) {
-            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            modelMeshes.push_back(Mesh(mesh));  // ½«µ±Ç°Íø¸ñÌí¼Óµ½ modelMeshes ÏòÁ¿ÖĞ
-        }
-
-        // µİ¹é´¦ÀíÃ¿¸ö×Ó½Úµã
-        for (unsigned int i = 0; i < node->mNumChildren; i++) {
-            ProcessNode(node->mChildren[i], scene, modelMeshes);
-        }
-    }
+    // åŠ è½½æ¨¡å‹æ•°æ®
+    void loadModel();
+    
+    // é€’å½’å¤„ç†èŠ‚ç‚¹ï¼ŒåŠ è½½ç½‘æ ¼
+    void processNode(aiNode* node, const aiScene* scene);
+    
+    // å¤„ç†å•ä¸ªç½‘æ ¼
+    Mesh* processMesh(aiMesh* mesh, const aiScene* scene);
+    
+    // åŠ è½½æè´¨çº¹ç†
+    std::vector<Texture2D*> loadMaterialTextures(aiMaterial* mat, aiTextureType type);
 };
 
 #endif
