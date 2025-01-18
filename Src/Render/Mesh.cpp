@@ -13,19 +13,15 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
 
 // 渲染网格
 void Mesh::Render(Shader& shader, const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection) const {
-    std::cout << "Rendering Mesh..." << std::endl;
+    //std::cout << "Rendering Mesh..." << std::endl;
 
     shader.use();
-    std::cout << "Shader used" << std::endl;
+    //std::cout << "Shader used" << std::endl;
 
     // 传递变换矩阵到着色器
     shader.setMat4("model", model);
     shader.setMat4("view", view);
     shader.setMat4("projection", projection);
-    std::cout << "Model, View, and Projection matrices set" << std::endl;
-    std::cout << "Setting model matrix: " << ToString::toString(model) << std::endl;
-    std::cout << "Setting view matrix: " << ToString::toString(view) << std::endl;
-    std::cout << "Setting projection matrix: " << ToString::toString(projection) << std::endl;
 
     // 绑定 VAO
     glBindVertexArray(VAO);

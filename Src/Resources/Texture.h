@@ -7,6 +7,8 @@
 #include <algorithm>
 #include <string>
 #include "../Core/EditorResource.h"
+#include <map>
+
 
 class Texture2D {
 public:
