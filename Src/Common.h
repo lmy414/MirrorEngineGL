@@ -18,7 +18,7 @@
 //封装渲染管线类
 //#include"../Src/Render/Render.h"
 //封装着色器类
-#include"../Src/Render/Material.h"
+//#include"../Src/Render/Material.h"
 //封装光源类
 #include"../Src/Render/Light//DirectionalLight.h"
 

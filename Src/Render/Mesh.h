@@ -8,7 +8,7 @@
 #include <glad/glad.h>
 #include "Shader.h"
 #include "../Resources/Texture.h"
-#include "Material.h"
+#include "Material/Material.h"
 
 // 用于表示网格中的一个顶点
 struct Vertex {
@@ -40,7 +40,7 @@ private:
     void setupMesh();
 
     // 绑定纹理到材质
-    void bindTexturesToMaterial();
+    //void bindTexturesToMaterial();
 };
 
 #endif

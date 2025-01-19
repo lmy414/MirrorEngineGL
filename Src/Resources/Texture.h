@@ -1,13 +1,16 @@
 #pragma once
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "../Render/Material.h"
+#include "../Render/Material/Material.h"
 #include "stb_image.h"
 #include <iostream>
 #include <algorithm>
 #include <string>
 #include "../Core/EditorResource.h"
 #include <map>
+
+
+class Material;  // Ç°ÏòÉùÃ÷
 
 
 class Texture2D {
@@ -43,6 +46,6 @@ private:
     bool is_valid;
 
     static std::map<std::string, Texture2D*> LoadedTextures;
-    EditorResource<Material*>       textureRefs;
+    EditorResource<Material*>textureRefs;
 };
 

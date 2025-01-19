@@ -7,7 +7,7 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
     : vertices(vertices), indices(indices), textures(textures) {
     std::cout << "Creating Mesh..." << std::endl;
     setupMesh();
-    bindTexturesToMaterial();
+    //bindTexturesToMaterial();
     std::cout << "Mesh Created!" << std::endl;
 }
 
@@ -88,7 +88,7 @@ void Mesh::setupMesh() {
 }
 
 // 绑定纹理到材质
-void Mesh::bindTexturesToMaterial() {
+/*void Mesh::bindTexturesToMaterial() {
     std::cout << "Binding textures to material..." << std::endl;
 
     if (!material) {
@@ -106,3 +106,4 @@ void Mesh::bindTexturesToMaterial() {
 
     std::cout << "Textures bound to material" << std::endl;
 }
+*/

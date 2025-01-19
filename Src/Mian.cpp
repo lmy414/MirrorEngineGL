@@ -49,7 +49,7 @@ int main() {
     glfwSetWindowUserPointer(window, &matrixManager);
 
     // 创建 Shader 对象并加载着色器
-    Shader shader("Shaders/VertexShader.glsl", "Shaders/PixelShader.glsl");
+    Shader shader("E:/MirrorEngine/MirrorEngine2/Shaders/Model.vs", "E:/MirrorEngine/MirrorEngine2/Shaders/Model.fs");
     // 使用指定路径创建 Texture2D 对象，并指定纹理类型
     Texture2D* diffuseTexture = new Texture2D("Assets/tex/cs3.png", Texture2D::ETexType::SRGB, false);
     // 加载模型
