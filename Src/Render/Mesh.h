@@ -1,46 +1,46 @@
 ﻿#ifndef MESH_H
 #define MESH_H
 
-#include <assimp/scene.h>
-#include <glm/glm.hpp>
 #include <vector>
+#include <memory>
 #include <string>
-#include <glad/glad.h>
-#include "Shader.h"
-#include "../Resources/Texture.h"
-#include "Material/Material.h"
-
-// 用于表示网格中的一个顶点
-struct Vertex {
-    glm::vec3 position;
-    glm::vec3 normal;
-    glm::vec2 texCoords;
-    glm::vec3 tangent;
-    glm::vec3 bitangent;
-    int boneIDs[4];  // 骨骼ID
-    float weights[4];  // 权重
-};
+#include <glm/glm.hpp>
+#include "../Resources/Texture.h"    // 引入纹理管理类
 
 class Mesh {
+   
 public:
-    std::vector<Vertex> vertices;  // 顶点数据
-    std::vector<unsigned int> indices;  // 索引数据
-    std::vector<Texture2D*> textures; // 纹理数据
-    unsigned int VAO, VBO, EBO;
-    Material* material = nullptr; // 材质
+    // 顶点结构体
+    struct Vertex {
+        glm::vec3 position;    // 顶点位置
+        glm::vec3 normal;      // 法线
+        glm::vec2 texCoords;   // 纹理坐标
+        glm::vec3 tangent;     // 切线
+        glm::vec3 bitangent;   // 位切线
+        int boneIDs[4];        // 骨骼ID
+        float weights[4];      // 骨骼权重
+    };
 
-    // 构造函数：接受顶点、索引和纹理数据
-    Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture2D*>& textures);
+    // 构造函数：自动加载模型并设置为网格
+    Mesh();
 
-    // 渲染网格
+    // 渲染方法：渲染所有网格
     void Render(Shader& shader, const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection) const;
 
+    // 渲染单个网格（初始化一次后，直接使用VAO进行渲染）
+    void RenderMesh() const;
+
 private:
-    // 设置OpenGL缓冲区
+    GLuint m_vao, m_vbo, m_ebo;  // VAO: 顶点数组对象，VBO: 顶点缓冲对象，EBO: 索引缓冲对象
+    std::vector<Vertex> m_vertices; // 顶点数据
+    std::vector<unsigned int> m_indices; // 索引数据
+    std::vector<std::shared_ptr<Texture>> m_textures; // 纹理数据
+
+    // 设置 OpenGL 缓冲区（初始化一次）
     void setupMesh();
 
-    // 绑定纹理到材质
-    //void bindTexturesToMaterial();
+    // 加载所有模型的网格
+    void LoadAllMeshes();
 };
 
-#endif
+#endif // MESH_H

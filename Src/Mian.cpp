@@ -1,187 +1,73 @@
 #include "Common.h"
 
+
 // 全局相机对象
-Core::Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));  // 初始化相机位置
+Core::Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
-DirectionalLight dirLight(
-    glm::vec3(-0.2f, -1.0f, -0.3f),   // 光源方向
-    glm::vec3(1.0f, 1.0f, 1.0f),       // 白色光源
-    1.0f                               // 光照强度
-);
+// 控制模型变换的对象
+TransformControls transformControls;
 
-float mouseSpeed = 0.1f; // 鼠标灵敏度
-float moveSpeed = 0.1f;  // 键盘移动速度
-
-InputManager* inputManager = nullptr;  // 输入管理器
-
-// 全局缓冲对象变量
-unsigned int VBO, VAO, EBO;
-
+// 主渲染循环
 int main() {
     // 初始化 OpenGL 和窗口
-    GLFWwindow* window = InitializeOpenGL(800, 600, "E Mao Engine");
+    GLFWwindow* window = InitializeOpenGL(800, 600, "Basic Mesh Rendering");
     if (!window) return -1;
 
-    // 创建矩阵管理器并设置初始矩阵
-    MatrixManager matrixManager;
-    //matrixManager.SetWindowSize(1920, 1080); // 设置窗口大小
-
-    // 创建输入管理器实例
-    inputManager = new InputManager(camera, moveSpeed, mouseSpeed);
-
-    // 注册输入回调函数
-    glfwSetCursorPosCallback(window, [](GLFWwindow* window, double xpos, double ypos) {
-        inputManager->MouseCallback(window, xpos, ypos);
-    });
-    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, int button, int action, int mods) {
-        inputManager->MouseButtonCallback(window, button, action, mods);
-    });
-
-    // 启用深度测试
-    glEnable(GL_DEPTH_TEST);
-
-    // 设置矩阵
-    matrixManager.SetModelMatrix(glm::mat4(1.0f)); // 单位矩阵
-    matrixManager.SetViewMatrix(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)); // 摄像机
-    matrixManager.SetFixedPerspectiveProjection(45.0f, 0.1f, 100.0f, 1920.0f / 1080.0f); // 设置投影矩阵
-    
-    // 设置矩阵管理器为窗口的用户数据
-    glfwSetWindowUserPointer(window, &matrixManager);
+    // 创建并初始化 ImGui 管理器
+    ImGuiManager imguiManager;
+    imguiManager.Initialize(window);  // 初始化 ImGui
 
     // 创建 Shader 对象并加载着色器
     Shader shader("E:/MirrorEngine/MirrorEngine2/Shaders/Model.vs", "E:/MirrorEngine/MirrorEngine2/Shaders/Model.fs");
-    // 使用指定路径创建 Texture2D 对象，并指定纹理类型
-    Texture2D* diffuseTexture = new Texture2D("Assets/tex/cs3.png", Texture2D::ETexType::SRGB, false);
-    // 加载模型
-    Model* models = new Model();  // 假设你要加载的模型路径
 
-    // 初始化 ImGui
-    ImGuiManager imguiManager;
-    imguiManager.Initialize(window);
-    
-    // 初始颜色值和旋转角度
-    float triangleColor[3] = { 1.0f, 1.0f, 1.0f };
-    float rotationAngles[3] = { 0.0f, 0.0f, 0.0f }; // X, Y, Z 轴的旋转角度
-
-    shader.setVec3("viewPos", camera.Position); // 获取相机位置
+    // 使用 ModelPool 来加载模型
+    std::shared_ptr<Model> model = ModelPool::Instance().LoadModel("cube", "Assets/m/cs2.fbx");  // 通过名称加载模型
+    Mesh mesh;
 
     // 主渲染循环
     while (!glfwWindowShouldClose(window)) {
         // 获取帧时间
-        float deltaTime = 0.016f;  // 假设固定帧时间（可以替换为实际的 deltaTime）
+        float deltaTime = 0.016f;  // 假设固定帧时间
 
-        // 处理输入
-        inputManager->ProcessInput(window, deltaTime);
+        // 清空屏幕
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        // 开始 ImGui 新一帧
+        imguiManager.BeginFrame();
+
+        // 绘制 GUI 控件
+        ImGui::Begin("Transform Controls");
+        transformControls.DrawGUI();  // 处理旋转、缩放、位置控件
+        ImGui::End();
+
+        // 获取变换矩阵
+        glm::mat4 modelMatrix = transformControls.GetTransformMatrix();
 
         // 获取矩阵
         glm::mat4 view = camera.GetViewMatrix();
-        glm::mat4 projection = matrixManager.GetProjectionMatrix();  // 获取投影矩阵
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 
-        
+        // 使用着色器
         shader.use();
-        dirLight.SetLightUniforms(shader);  // 设置光源 uniform 到着色器
-        
-        // 清空屏幕
-        glClearColor(0.5f, 0.5f, 0.5f, 1.0f); // 黑色
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        shader.setMat4("model", modelMatrix);
+        shader.setMat4("view", view);
+        shader.setMat4("projection", projection);
 
-        
-        // 创建模型矩阵
-        glm::mat4 model = glm::mat4(1.0f); // 初始化为单位矩阵
-
-        // 应用绕 X, Y, Z 轴的旋转
-        model = glm::rotate(model, glm::radians(rotationAngles[0]), glm::vec3(1.0f, 0.0f, 0.0f)); // 绕 X 轴旋转
-        model = glm::rotate(model, glm::radians(rotationAngles[1]), glm::vec3(0.0f, 1.0f, 0.0f)); // 绕 Y 轴旋转
-        model = glm::rotate(model, glm::radians(rotationAngles[2]), glm::vec3(0.0f, 0.0f, 1.0f)); // 绕 Z 轴旋转
-        
         // 渲染模型
-        for (Mesh* mesh : models->meshes)
-        {
-            mesh->Render(shader,model,view,projection);
-        }
+        mesh.Render(shader, modelMatrix, view, projection);
 
-        // 启动 ImGui 界面
-        imguiManager.BeginFrame();
-
-
-        ImGui::Begin(u8"菜单");
-        // 放置按钮，并设置按钮大小
-        if (ImGui::Button(u8"重置相机", ImVec2(60, 30))) {
-                camera.ResetCamera();  // 重置相机到初始位置和朝向
-        }
-        if (ImGui::Button(u8"加载模型", ImVec2(60, 30))) {
-                // 打开文件选择对话框
-                ImGuiFileDialog::Instance()->OpenDialog("ChooseModelDlgKey", "Choose a model file", ".obj,.fbx");
-        }
-        ImGui::End();
-        
-        // 如果文件选择对话框打开并且选择了文件
-        if (ImGuiFileDialog::Instance()->Display("ChooseModelDlgKey")) {
-            if (ImGuiFileDialog::Instance()->IsOk()) {
-                std::string filePath = ImGuiFileDialog::Instance()->GetFilePathName();  // 获取文件路径
-                std::cout << "Selected model: " << filePath << std::endl;
-
-                // 加载选择的模型文件
-                Model* newModel = new Model(filePath);
-                if (newModel != nullptr) {
-                    models = newModel;  // 更新当前模型
-                } else {
-                    std::cerr << "Failed to load selected model!" << std::endl;
-                }
-            }
-            ImGuiFileDialog::Instance()->Close();  // 关闭对话框
-        }
-
-        // Cube 控制面板
-        ImGui::Begin("Cube Control");
-        ImGui::Text("Adjust cube rotation:");
-        ImGui::SliderFloat("Rotate X", &rotationAngles[0], 0.0f, 360.0f);
-        ImGui::SliderFloat("Rotate Y", &rotationAngles[1], 0.0f, 360.0f);
-        ImGui::SliderFloat("Rotate Z", &rotationAngles[2], 0.0f, 360.0f);
-        
-        ImGui::Text("Change color:");
-        ImGui::SliderFloat("Red", &triangleColor[0], 0.0f, 1.0f);
-        ImGui::SliderFloat("Green", &triangleColor[1], 0.0f, 1.0f);
-        ImGui::SliderFloat("Blue", &triangleColor[2], 0.0f, 1.0f);
-        
-        ImGui::Text("Mouse Speed:");
-        ImGui::SliderFloat("Mouse Sensitivity", &mouseSpeed, 0.01f, 1.0f); // 控制鼠标灵敏度
-        ImGui::SliderFloat("Move Speed", &moveSpeed, 0.1f, 10.0f); // 设置范围从 0.1 到 10.0
-        ImGui::End();
-
-        ImGui::Begin("Lighting Control");
-        // 修改光照方向
-        ImGui::SliderFloat("Light Direction X", &dirLight.direction.x, -1.0f, 1.0f);
-        ImGui::SliderFloat("Light Direction Y", &dirLight.direction.y, -1.0f, 1.0f);
-        ImGui::SliderFloat("Light Direction Z", &dirLight.direction.z, -1.0f, 1.0f);
-        dirLight.SetDirection(dirLight.direction);  // 使用新方法
-
-        // 修改光源颜色
-        ImGui::ColorEdit3("Light Color", &dirLight.color[0]);
-        dirLight.SetColor(dirLight.color);  // 使用新方法
-
-        // 修改光照强度
-        ImGui::SliderFloat("Light Intensity", &dirLight.intensity, 0.0f, 10.0f);
-        dirLight.SetIntensity(dirLight.intensity);  // 使用新方法
-
-        ImGui::End();
-
-        imguiManager.EndFrame();
+        // 渲染 ImGui 界面
+        imguiManager.EndFrame();  // 结束 ImGui 渲染
 
         // 交换缓冲
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    // 释放资源
-    delete models;  // 删除模型
-
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);  // 释放 EBO
-
+    // 关闭 ImGui
     imguiManager.Shutdown();
+
     glfwTerminate();
-    delete inputManager;
     return 0;
 }

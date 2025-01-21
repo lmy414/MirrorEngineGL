@@ -6,10 +6,10 @@
 // ModelMaterial 类，继承自 Material
 class ModelMaterial : public Material {
 public:
-    Texture2D* albedo;  // 漫反射贴图
+    Texture* albedo;  // 漫反射贴图
 
     // 构造函数，使用默认的 model.fs 着色器和初始化 albedo 贴图
-    ModelMaterial(Texture2D* _albedo);
+    ModelMaterial(Texture* _albedo);
 
     // 设置材质的 uniform 参数
     void SetMaterialUniforms() override;

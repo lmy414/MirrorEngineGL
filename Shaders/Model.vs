@@ -1,22 +1,21 @@
 #version 330 core
 
-layout(location = 0) in vec3 aPos;      // ¶¥µãÎ»ÖÃ
-layout(location = 1) in vec3 aNormal;   // ¶¥µã·¨Ïß
-layout(location = 2) in vec2 aTexCoords; // ÎÆÀí×ø±ê
+layout(location = 0) in vec3 aPos;      // ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½
+layout(location = 1) in vec3 aNormal;   // ï¿½ï¿½ï¿½ã·¨ï¿½ï¿½
+layout(location = 2) in vec2 aTexCoords; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-out vec2 TexCoords;    // ´«µÝÎÆÀí×ø±ê
-out vec3 FragPos;      // ´«µÝÆ¬¶ÎÎ»ÖÃ
-out vec3 Normal;       // ´«µÝ·¨Ïß
+out vec2 TexCoords;    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+out vec3 FragPos;      // ï¿½ï¿½ï¿½ï¿½Æ¬ï¿½ï¿½Î»ï¿½ï¿½
+out vec3 Normal;       // ï¿½ï¿½ï¿½Ý·ï¿½ï¿½ï¿½
 
-uniform mat4 model;    // Ä£ÐÍ¾ØÕó
-uniform mat4 view;     // ÊÓÍ¼¾ØÕó
-uniform mat4 projection; // Í¶Ó°¾ØÕó
+uniform mat4 model;    // Ä£ï¿½Í¾ï¿½ï¿½ï¿½
+uniform mat4 view;     // ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½
+uniform mat4 projection; // Í¶Ó°ï¿½ï¿½ï¿½ï¿½
 
 void main() {
-    // ½«¶¥µãÎ»ÖÃ×ª»»µ½²Ã¼ô¿Õ¼ä
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Î»ï¿½ï¿½×ªï¿½ï¿½ï¿½ï¿½ï¿½Ã¼ï¿½ï¿½Õ¼ï¿½
     gl_Position = projection * view * model * vec4(aPos, 1.0);
-    // ´«µÝÎÆÀí×ø±ê¡¢Æ¬¶ÎÎ»ÖÃºÍ·¨Ïß
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê¡¢Æ¬ï¿½ï¿½Î»ï¿½ÃºÍ·ï¿½ï¿½ï¿½
     TexCoords = aTexCoords;
     FragPos = vec3(model * vec4(aPos, 1.0));
-    Normal = mat3(transpose(inverse(model))) * aNormal;
 }

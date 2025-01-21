@@ -3,7 +3,7 @@
 
 
 // ModelMaterial 构造函数
-ModelMaterial::ModelMaterial(Texture2D* _albedo)
+ModelMaterial::ModelMaterial(Texture* _albedo)
     : Material(new Shader("E:/MirrorEngine/MirrorEngine2/Shaders/Model.vs","E:/MirrorEngine/MirrorEngine2/Shaders/Model.fs")), albedo(_albedo) {
     std::cout << "ModelMaterial Created" << std::endl;
 }

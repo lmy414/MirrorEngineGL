@@ -443,9 +443,7 @@
     </ClCompile>
     <ClCompile Include="Src\Render\Opengl_Utils.cpp" />
     <ClCompile Include="Src\Render\Shader.cpp" />
-    <ClCompile Include="Src\Resources\Model.cpp" />
     <ClCompile Include="Src\Resources\stb_image.cpp" />
-    <ClCompile Include="Src\Resources\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="imgui\dirent.h" />
@@ -463,6 +461,7 @@
     <ClInclude Include="Src\Core\EditorResource.h" />
     <ClInclude Include="Src\Core\InputManager.h" />
     <ClInclude Include="Src\Gui\Gui.h" />
+    <ClInclude Include="Src\Gui\ImGuiControls.h" />
     <ClInclude Include="Src\Render\camera.h" />
     <ClInclude Include="Src\Render\Light\DirectionalLight.h" />
     <ClInclude Include="Src\Render\Material\MaterialManager.h" />
@@ -474,6 +473,8 @@
     <ClInclude Include="Src\Render\Shader.h" />
     <ClInclude Include="Src\Common.h" />
     <ClInclude Include="Src\Resources\Model.h" />
+    <ClInclude Include="Src\Resources\ModelPool.h" />
+    <ClInclude Include="Src\Resources\TexturePool.h" />
     <ClInclude Include="Src\Tool\Math.h" />
     <ClInclude Include="Src\Tool\MatrixManager.h" />
     <ClInclude Include="Src\Resources\stb_image.h" />

@@ -5,6 +5,7 @@
 // 管理图形用户界面的相关操作
 #include "../Src/gui/Gui.h"
 #include "../imgui/ImGuiFileDialog.h"
+#include "../Src/Gui/ImGuiControls.h"
 
 // 渲染模块
 // 封装了 OpenGL 常用工具函数
@@ -33,6 +34,7 @@
 #include "../Src/Resources/Texture.h"
 //立方体类，定义了一个立方体的顶点数据和索引数据
 #include "../Src/Resources/Model.h"
+#include "Resources/ModelPool.h"
 
 //核心模块
 //输入管理器，处理键盘和鼠标输入

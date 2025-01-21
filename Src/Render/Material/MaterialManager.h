@@ -8,5 +8,5 @@
 class MaterialManager {
 public:
     // 根据材质类型创建材质
-    static Material* CreateMaterialByType(EMaterialType type, Texture2D* albedo = nullptr);
+    static Material* CreateMaterialByType(EMaterialType type, Texture* albedo = nullptr);
 };

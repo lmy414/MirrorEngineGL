@@ -2,7 +2,7 @@
 #include <iostream>
 
 // UnlitMaterial 构造函数
-UnlitMaterial::UnlitMaterial(Texture2D* _albedo_map)
+UnlitMaterial::UnlitMaterial(Texture* _albedo_map)
     : Material(new Shader("E:/MirrorEngine/MirrorEngine2/Shaders/unlit.vs","E:/MirrorEngine/MirrorEngine2/Shaders/unlit.fs")), albedo_map(_albedo_map) {
     std::cout << "UnlitMaterial Created" << std::endl;
 }

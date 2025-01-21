@@ -1,8 +1,8 @@
 ﻿#include "MaterialManager.h"
 #include <iostream>
 
-// MaterialManager 的 CreateMaterialByType 实现
-Material* MaterialManager::CreateMaterialByType(EMaterialType type, Texture2D* albedo) {
+/*// MaterialManager 的 CreateMaterialByType 实现
+Material* MaterialManager::CreateMaterialByType(EMaterialType type, Texture* albedo) {
     switch (type) {
     case EMaterialType::Model:
         return new ModelMaterial(albedo);
@@ -13,4 +13,4 @@ Material* MaterialManager::CreateMaterialByType(EMaterialType type, Texture2D* a
         return nullptr;
     }
 }
-#include "MaterialManager.h"
+#include "MaterialManager.h"*/

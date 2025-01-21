@@ -1,109 +1,130 @@
 ﻿#include "Mesh.h"
-#include "../Tool/ToString.h"
-#include <iostream>
+#include "../Resources/ModelPool.h"  // 引入模型池
+#include <iostream>  // 用于打印调试信息
 
-// 构造函数：接受顶点、索引和纹理数据
-Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture2D*>& textures)
-    : vertices(vertices), indices(indices), textures(textures) {
-    std::cout << "Creating Mesh..." << std::endl;
-    setupMesh();
-    //bindTexturesToMaterial();
-    std::cout << "Mesh Created!" << std::endl;
+// 构造函数：自动加载模型并设置为网格
+Mesh::Mesh() {
+    std::cout << "Mesh constructor called, loading all meshes..." << std::endl;  // 调试信息
+    LoadAllMeshes();  // 加载所有模型并初始化网格
 }
 
-// 渲染网格
-void Mesh::Render(Shader& shader, const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection) const {
-    //std::cout << "Rendering Mesh..." << std::endl;
 
-    shader.use();
-    //std::cout << "Shader used" << std::endl;
-
-    // 传递变换矩阵到着色器
-    shader.setMat4("model", model);
-    shader.setMat4("view", view);
-    shader.setMat4("projection", projection);
-
+void Mesh::RenderMesh() const {
     // 绑定 VAO
-    glBindVertexArray(VAO);
+    glBindVertexArray(m_vao);
 
     // 绘制网格
-    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(indices.size()), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, static_cast<GLsizei>(m_indices.size()), GL_UNSIGNED_INT, 0);
 
     // 解绑 VAO
     glBindVertexArray(0);
     
 }
 
-// 设置OpenGL缓冲区
+// 渲染方法：渲染所有网格
+void Mesh::Render(Shader& shader, const glm::mat4& model, const glm::mat4& view, const glm::mat4& projection) const {
+    std::cout << "Rendering mesh..." << std::endl;  // 调试信息
+    
+    // 使用着色器
+    shader.use();
+    
+    // 传递变换矩阵到着色器
+    shader.setMat4("model", model);
+    shader.setMat4("view", view);
+    shader.setMat4("projection", projection);
+    RenderMesh();
+}
+
+// 设置 OpenGL 缓冲区（初始化一次）
 void Mesh::setupMesh() {
-    std::cout << "Generating OpenGL buffers..." << std::endl;
+    std::cout << "Setting up mesh..." << std::endl;  // 调试信息
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    // 生成并绑定 VAO
+    glGenVertexArrays(1, &m_vao);
+    glBindVertexArray(m_vao);
 
-    std::cout << "Generated VAO: " << VAO << ", VBO: " << VBO << ", EBO: " << EBO << std::endl;
+    // 生成并绑定 VBO
+    glGenBuffers(1, &m_vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vbo);
+    glBufferData(GL_ARRAY_BUFFER, m_vertices.size() * sizeof(Vertex), &m_vertices[0], GL_STATIC_DRAW);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), &vertices[0], GL_STATIC_DRAW);
-    std::cout << "Vertex buffer data uploaded" << std::endl;
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), &indices[0], GL_STATIC_DRAW);
-    std::cout << "Index buffer data uploaded" << std::endl;
+    // 生成并绑定 EBO
+    glGenBuffers(1, &m_ebo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, m_indices.size() * sizeof(unsigned int), &m_indices[0], GL_STATIC_DRAW);
 
     // 设置顶点属性指针
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, position));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position));
-    std::cout << "Position attribute set" << std::endl;
 
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, normal));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, normal));
-    std::cout << "Normal attribute set" << std::endl;
 
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, texCoords));
     glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, texCoords));
-    std::cout << "Texture coordinates attribute set" << std::endl;
 
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, tangent));
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, tangent));
-    std::cout << "Tangent attribute set" << std::endl;
 
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, bitangent));
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, bitangent));
-    std::cout << "Bitangent attribute set" << std::endl;
 
+    glVertexAttribPointer(5, 4, GL_INT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, boneIDs));
     glEnableVertexAttribArray(5);
-    glVertexAttribIPointer(5, 4, GL_INT, sizeof(Vertex), (void*)offsetof(Vertex, boneIDs));
-    std::cout << "Bone IDs attribute set" << std::endl;
 
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)offsetof(Vertex, weights));
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, weights));
-    std::cout << "Bone weights attribute set" << std::endl;
 
+    // 解绑定 VAO 和 VBO
     glBindVertexArray(0);
-    std::cout << "VAO unbound" << std::endl;
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-// 绑定纹理到材质
-/*void Mesh::bindTexturesToMaterial() {
-    std::cout << "Binding textures to material..." << std::endl;
+// 加载所有模型的网格
+void Mesh::LoadAllMeshes() {
+    std::cout << "Loading all meshes from model pool..." << std::endl;
 
-    if (!material) {
-        material = new SimpleMaterial(0, "default", nullptr, 0, 0, 0.0f, 0.0f); // 默认简单材质
-        std::cout << "Created default material" << std::endl;
+    // 获取模型池中的所有模型
+    auto& models = ModelPool::Instance().GetModels();
+
+    // 检查模型池是否为空
+    if (models.empty()) {
+        std::cout << "Error: No models found in the pool!" << std::endl;
+        return;
     }
 
-    // 将所有纹理绑定到材质
-    for (size_t i = 0; i < textures.size(); ++i) {
-        // 每个纹理的类型分别是diffuseTexture、normalTexture等，你可以根据纹理的顺序指定
-        std::string textureName = (i == 0) ? "diffuseTexture" : "normalTexture";  // 这里只是一个示例
-        material->SetTexture(textureName, textures[i]->GetID());
-        std::cout << "Texture bound - Type: " << textureName << ", TextureID: " << textures[i]->GetID() << std::endl;
-    }
+    // 遍历模型池中的所有模型
+    for (const auto& pair : models) {
+        auto model = pair.second;
+        if (!model) {
+            std::cout << "Error: Found a null model in the pool!" << std::endl;
+            continue;
+        }
 
-    std::cout << "Textures bound to material" << std::endl;
+        // 获取模型的顶点、索引和纹理数据
+        m_vertices = model->GetVertices();
+        m_indices = model->GetIndices();
+        m_textures = model->GetTextures();
+
+        std::cout << "Loaded model " << pair.first << " with " << m_vertices.size() << " vertices and " << m_indices.size() << " indices." << std::endl;
+
+        // 打印前10个顶点信息
+        static bool printed = false;
+        if (!printed) {
+            for (int i = 0; i < std::min(10, static_cast<int>(m_vertices.size())); ++i) {
+                const auto& vertex = m_vertices[i];
+                std::cout << "Vertex " << i << ": Position (" 
+                          << vertex.position.x << ", "
+                          << vertex.position.y << ", "
+                          << vertex.position.z << ")\n";
+            }
+            printed = true; // 只打印一次
+        }
+
+        // 初始化 OpenGL 缓冲区
+        setupMesh();
+    }
 }
-*/
+
+
