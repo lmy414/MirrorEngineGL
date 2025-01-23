@@ -4,7 +4,7 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include "camera.h"
+
 
 
 // 初始化 OpenGL 和创建窗口
